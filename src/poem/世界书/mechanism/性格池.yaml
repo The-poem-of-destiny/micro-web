@@ -1,0 +1,4 @@
+<性格池>
+    规则: 为了避免刻板印象，本次正文生成的新角色,必须从此处随机后的三个性格严格按顺序索引取用，不得修改
+    性格: [{{random::Rc,Rr,Rh,Rf}}{{random::Eu,Ed,Et,Ep}}{{random::Ap,Ac,Ai,Aw}}{{random::Cp,Cr,Ct,Cm}}{{random::Pf,Pw,Pv,Ps}}-{{random::Sk,Sm,Sf}},{{random::Rc,Rr,Rh,Rf}}{{random::Eu,Ed,Et,Ep}}{{random::Ap,Ac,Ai,Aw}}{{random::Cp,Cr,Ct,Cm}}{{random::Pf,Pw,Pv,Ps}}-{{random::Sk,Sm,Sf}},{{random::Rc,Rr,Rh,Rf}}{{random::Eu,Ed,Et,Ep}}{{random::Ap,Ac,Ai,Aw}}{{random::Cp,Cr,Ct,Cm}}{{random::Pf,Pw,Pv,Ps}}-{{random::Sk,Sm,Sf}}]
+</性格池>

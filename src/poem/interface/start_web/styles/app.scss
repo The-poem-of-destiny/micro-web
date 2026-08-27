@@ -1,0 +1,44 @@
+// App 壳：标题 + 提交按钮
+.sw {
+  max-width: 720px;
+  height: 100%;
+  margin: 0 auto;
+  padding: var(--sw-space-4);
+}
+
+.sw__head {
+  text-align: center;
+  margin-bottom: var(--sw-space-5);
+}
+
+.sw__title {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: 6px;
+  color: var(--sw-accent-strong);
+}
+
+.sw__subtitle {
+  margin: var(--sw-space-1) 0 0;
+  font-size: var(--sw-font-sm);
+  color: var(--sw-text-dim);
+}
+
+.sw__submit {
+  display: block;
+  width: 100%;
+  margin: var(--sw-space-2) 0 var(--sw-space-4);
+  padding: var(--sw-space-3);
+  border: 1px solid var(--sw-accent);
+  border-radius: var(--sw-radius);
+  background: var(--sw-card-on);
+  font-size: var(--sw-font-base);
+  letter-spacing: 8px;
+  color: var(--sw-accent-strong);
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

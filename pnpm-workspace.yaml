@@ -1,4 +1,4 @@
 allowBuilds:
-  '@parcel/watcher': true
+  "@parcel/watcher": true
   unrs-resolver: true
   vue-demi: true

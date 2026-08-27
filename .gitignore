@@ -15,3 +15,7 @@ components.d.ts
 示例/
 初始模板/
 dist/角色卡示例/
+dist/脚本示例/
+dist/前端界面示例/
+dist/流式楼层界面示例/
+tmp/

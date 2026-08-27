@@ -1,4 +1,6 @@
 {
+  // Live Server 对 dist 静态资源发送 CORS 头：酒馆页面跨端口加载界面（$('body').load）必需
+  "liveServer.settings.cors": true,
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.addMissingImports.ts": "explicit",

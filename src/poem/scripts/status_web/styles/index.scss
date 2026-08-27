@@ -1,0 +1,146 @@
+// ============================================================
+// status_web 全局设计令牌（design token）—— 深色主题 · 现代 × 西幻
+// 以 CSS 自定义属性注入 :root（--stb-* 前缀避免与酒馆页面变量冲突），
+// 组件样式直接 var() 引用；单深色主题，无需 .dark 类切换。
+// ============================================================
+
+// ---------- 颜色 ----------
+$colors: (
+  bg-orb: rgba(15, 17, 26, 0.9),
+  bg-panel: rgba(15, 17, 26, 0.94),
+  bg-card: rgba(255, 255, 255, 0.04),
+  border: rgba(200, 180, 120, 0.45),
+  border-soft: rgba(200, 180, 120, 0.25),
+  text: #e8e3d5,
+  text-dim: rgba(232, 227, 213, 0.55),
+  accent: #c8b478,
+  accent-soft: rgba(200, 180, 120, 0.9),
+  // 状态色：无损/已完成、中伤/锁级警告、重伤/濒死等危险
+  success: #6fb07f,
+  warning: #d9a441,
+  danger: #c4574e,
+  // 经验/属性/好感条的轨道底色
+  bar-track: rgba(255, 255, 255, 0.08),
+  bar-attr: rgba(255, 255, 255, 0.34),
+);
+
+// ---------- 伤势六档色（渐深；无损≈success、中伤≈warning、濒死≈danger） ----------
+// 英文键：无损=intact 轻伤=light 中伤=moderate 重伤=severe 濒死=critical 死亡=dead
+$hurt-colors: (
+  intact: #6fb07f,
+  light: #a8c078,
+  moderate: #d9a441,
+  severe: #d07a4a,
+  critical: #c4574e,
+  dead: #6b6b6b,
+);
+
+// ---------- 品质七档色（普通灰/优良绿/稀有蓝/史诗紫/传说橙/神话红/唯一青） ----------
+$quality-colors: (
+  normal: #9aa0ab,
+  fine: #6fb07f,
+  rare: #5b9bd5,
+  epic: #a678d5,
+  legend: #e0a34a,
+  mythic: #d06060,
+  unique: #62c4c4,
+);
+
+// ---------- 圆角 ----------
+$radii: (
+  orb: 50%,
+  panel: 12px,
+  card: 8px,
+);
+
+// ---------- 间距 ----------
+$spaces: (
+  1: 4px,
+  2: 8px,
+  3: 12px,
+  4: 16px,
+  5: 20px,
+);
+
+// ---------- 阴影 ----------
+$shadows: (
+  orb: 0 2px 10px rgba(0, 0, 0, 0.35),
+  panel: 0 12px 32px rgba(0, 0, 0, 0.5),
+);
+
+// ---------- 字号 ----------
+$font-sizes: (
+  xs: 12px,
+  sm: 14px,
+  base: 16px,
+  lg: 18px,
+);
+
+// ---------- 图标尺寸 ----------
+$icon-sizes: (
+  sm: 12px,
+  md: 16px,
+  lg: 20px,
+);
+
+// ---------- 层级 ----------
+$z-indexes: (
+  orb: 999998,
+  panel: 999999,
+);
+
+:root {
+  @each $name, $value in $colors {
+    --stb-color-#{$name}: #{$value};
+  }
+
+  @each $name, $value in $hurt-colors {
+    --stb-hurt-#{$name}: #{$value};
+  }
+
+  @each $name, $value in $quality-colors {
+    --stb-quality-#{$name}: #{$value};
+  }
+
+  @each $name, $value in $radii {
+    --stb-radius-#{$name}: #{$value};
+  }
+
+  @each $name, $value in $spaces {
+    --stb-space-#{$name}: #{$value};
+  }
+
+  @each $name, $value in $shadows {
+    --stb-shadow-#{$name}: #{$value};
+  }
+
+  @each $name, $value in $font-sizes {
+    --stb-font-size-#{$name}: #{$value};
+  }
+
+  @each $name, $value in $icon-sizes {
+    --stb-icon-#{$name}: #{$value};
+  }
+
+  @each $name, $value in $z-indexes {
+    --stb-z-#{$name}: #{$value};
+  }
+
+  // ---------- 字体 ----------
+  --stb-font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+  --stb-font-family-display: Georgia, 'Noto Serif SC', 'Songti SC', 'Times New Roman', serif;
+
+  // ---------- 尺寸 ----------
+  // 悬浮球直径（与 composables/useOrbLayout.ts 的 ORB_SIZE 保持一致）
+  --stb-orb-size: 40px;
+  // 面板最大高度：内容自适应，超出上限后滚动
+  // 移动端 85vh（抽屉感）；非移动端见下方媒体查询
+  --stb-panel-max-height: 85vh;
+}
+
+// ---------- 非移动端（与 useDevice 的 mobile 断点 ≤640px 对齐） ----------
+@media (min-width: 641px) {
+  :root {
+    --stb-panel-max-height: min(85vh, 720px);
+  }
+}

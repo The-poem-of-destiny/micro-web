@@ -221,6 +221,10 @@ export const useSettingsStore = defineStore('settings', () => {
 
 在设计样式时, 你应该优先使用 tailwindcss 直接在 vue 组件的 `<template>` 内书写, 对于无法这样做的情况则使用 `<style scoped>` 标签.
 
+但有一个例外: html 入口的前端界面 (既有 `index.html` 又有 `index.ts` 的项目) **禁止在 `.vue` 文件里写 `<style>` 块**.
+webpack 5.109 在 `outputModule` + production (concatenateModules) 下, 会给 scoped style 注入的 `_export_sfc` helper 包上 `__webpack_require__.cjs(...)`, 而 ESM 输出里 `__webpack_require__` 运行时并未定义, 导致运行时 `ReferenceError: __webpack_require__ is not defined` (dev 模式不拼接模块故不报错, 很隐蔽).
+这类界面的样式应写入 `styles/*.scss` 全局文件 (在 `index.ts` 中 import), 用类名前缀 (如 `sw-`、`stb-`) 防止冲突; 组件模板可以继续用 tailwindcss 原子类.
+
 ### 正确在加载、卸载前端界面或脚本时执行功能
 
 你应该总是在加载时才执行代码, 而不该直接在全局作用域中执行代码.

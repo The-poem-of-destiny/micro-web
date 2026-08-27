@@ -1,0 +1,88 @@
+<current_variables>
+<%_ {
+  const data = getMessageVar('stat_data', { defaults: {} }) || {};
+  const cleanData = _.cloneDeep(data);
+
+  // 登神长阶阶段展开：未开启仅显示开关；已开启后，等级达标或字段已有内容才展示（避免剧透后续阶段）
+  const ASCENSION_STAGES_USER = [
+    { level: 12, fields: ['要素'] },
+    { level: 16, fields: ['权能'] },
+    { level: 20, fields: ['法则'] },
+    { level: 24, fields: ['神位'] },
+    { level: 25, fields: ['神国'] },
+  ];
+  const ASCENSION_STAGES_PARTNER = [
+    { level: 13, fields: ['要素'] },
+    { level: 17, fields: ['权能'] },
+    { level: 21, fields: ['法则'] },
+    { level: 25, fields: ['神位', '神国'] },
+  ];
+
+  const visibleAscension = (asc, level, stages) => {
+    if (!asc) return asc;
+    if (asc._已开启 !== true) return _.pick(asc, '_已开启');
+    const visible = stages
+      .filter(s => level >= s.level || s.fields.some(f => !_.isEmpty(asc[f])))
+      .flatMap(s => s.fields);
+    return _.pick(asc, ['_已开启', ...visible]);
+  };
+
+  // 最近消息文本：仅"文中提到"的伙伴才完整展示
+  const recentText = (getChatMessages(-5, -1) || [])
+    .join('\n')
+    // 剔除变量更新块：JSON Patch 路径含角色名，避免"更新过=被提到"的误判
+    .replace(/<UpdateVariable>[\s\S]*?<\/UpdateVariable>/g, '')
+    .replace(/<Analysis>[\s\S]*?<\/Analysis>/g, '');
+
+  // 伙伴索引字段：未提到时只展示这些（基础信息+行为）
+  const partnerIndexFields = ['种族', '身份', '职业', '_生命层级', '_等级', '行为', '好感', '命定契约'];
+
+  if (cleanData.user && cleanData.user.登神长阶) {
+    cleanData.user.登神长阶 = visibleAscension(
+      cleanData.user.登神长阶,
+      cleanData.user._等级 || 1,
+      ASCENSION_STAGES_USER,
+    );
+  }
+
+  if (cleanData.partner) {
+    // 子串索引：每个角色名的所有连续子串（最短3字，短名以全名兜底）→ 角色集合，用于模糊匹配"文中提到"
+    const MIN_LEN = 3;
+    const substringIndex = new Map();
+    _.forOwn(cleanData.partner, (_p, name) => {
+      const minLen = Math.min(MIN_LEN, name.length); // 两字名/单字名：用全名作子串，避免匹配不到
+      for (let len = minLen; len <= name.length; len++)
+        for (let start = 0; start + len <= name.length; start++) {
+          const sub = name.slice(start, start + len);
+          if (!substringIndex.has(sub)) substringIndex.set(sub, new Set());
+          substringIndex.get(sub).add(name);
+        }
+    });
+
+    // 文本滑动 n-gram 查表：命中任意子串即算"提到"
+    const mentioned = new Set();
+    const partnerNames = _.keys(cleanData.partner);
+    const maxNameLen = partnerNames.reduce((m, n) => Math.max(m, n.length), 0);
+    const minNameLen = partnerNames.reduce((m, n) => Math.min(m, n.length), Infinity);
+    for (let len = Math.min(MIN_LEN, minNameLen); len <= maxNameLen; len++)
+      for (let i = 0; i + len <= recentText.length; i++) {
+        const hit = substringIndex.get(recentText.slice(i, i + len));
+        if (hit) hit.forEach(name => mentioned.add(name));
+      }
+
+    _.forOwn(cleanData.partner, (p, name) => {
+      if (mentioned.has(name)) {
+        // 文中提到：完整展示，登神长阶按阶段裁剪
+        if (p.登神长阶) {
+          p.登神长阶 = visibleAscension(p.登神长阶, p._等级 || 1, ASCENSION_STAGES_PARTNER);
+        }
+      } else {
+        // 未提到：仅展示索引（基础信息+行为）
+        cleanData.partner[name] = _.pick(p, partnerIndexFields);
+      }
+    });
+  }
+_%>
+<%- YAML.stringify(cleanData, { blockQuote: 'literal' }) _%>
+<%_ } _%>
+</current_variables>

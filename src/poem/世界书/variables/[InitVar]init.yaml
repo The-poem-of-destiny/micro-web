@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=../../schema.json
+
+time: ''
+loc: ''
+update_request: {}
+user:
+  种族: ''
+  身份: ''
+  职业: ''
+  _生命层级: 第一层级
+  _等级: 1
+  经验: 0
+  属性:
+    str: 0
+    dex: 0
+    con: 0
+    int: 0
+    wis: 0
+  伤势:
+    程度: 无损
+    部位: {}
+  资产:
+    money: 0
+  命运点数: 0
+  物品: {}
+  技能: {}
+  buff: {}
+  登神长阶:
+    _已开启: false
+    要素: {}
+    权能: {}
+    法则: {}
+    神位: ''
+    神国: {}
+partner: {}
+tasks: {}

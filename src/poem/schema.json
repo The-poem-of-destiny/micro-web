@@ -1,0 +1,414 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "time": {
+      "default": "",
+      "type": "string"
+    },
+    "loc": {
+      "default": "",
+      "type": "string"
+    },
+    "update_request": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "object",
+          "properties": {
+            "_等级": {
+              "type": "number"
+            },
+            "_生命层级": {
+              "type": "string"
+            },
+            "登神长阶": {
+              "type": "object",
+              "properties": {
+                "_已开启": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "partner": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "角色名"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "_等级": {
+                "type": "number"
+              },
+              "_生命层级": {
+                "type": "string"
+              },
+              "登神长阶": {
+                "type": "object",
+                "properties": {
+                  "_已开启": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "user": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "种族": {
+          "$ref": "#/$defs/__schema0"
+        },
+        "身份": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "职业": {
+          "$ref": "#/$defs/__schema2"
+        },
+        "_生命层级": {
+          "$ref": "#/$defs/__schema3"
+        },
+        "_等级": {
+          "$ref": "#/$defs/__schema4"
+        },
+        "经验": {
+          "$ref": "#/$defs/__schema5"
+        },
+        "属性": {
+          "$ref": "#/$defs/__schema6"
+        },
+        "伤势": {
+          "$ref": "#/$defs/__schema7"
+        },
+        "资产": {
+          "$ref": "#/$defs/__schema8"
+        },
+        "物品": {
+          "$ref": "#/$defs/__schema9"
+        },
+        "技能": {
+          "$ref": "#/$defs/__schema10"
+        },
+        "buff": {
+          "$ref": "#/$defs/__schema11"
+        },
+        "登神长阶": {
+          "$ref": "#/$defs/__schema12"
+        },
+        "命运点数": {
+          "default": 0,
+          "type": "number"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "partner": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "角色名"
+      },
+      "additionalProperties": {
+        "default": {},
+        "type": "object",
+        "properties": {
+          "种族": {
+            "$ref": "#/$defs/__schema0"
+          },
+          "身份": {
+            "$ref": "#/$defs/__schema1"
+          },
+          "职业": {
+            "$ref": "#/$defs/__schema2"
+          },
+          "_生命层级": {
+            "$ref": "#/$defs/__schema3"
+          },
+          "_等级": {
+            "$ref": "#/$defs/__schema4"
+          },
+          "经验": {
+            "$ref": "#/$defs/__schema5"
+          },
+          "属性": {
+            "$ref": "#/$defs/__schema6"
+          },
+          "伤势": {
+            "$ref": "#/$defs/__schema7"
+          },
+          "资产": {
+            "$ref": "#/$defs/__schema8"
+          },
+          "物品": {
+            "$ref": "#/$defs/__schema9"
+          },
+          "技能": {
+            "$ref": "#/$defs/__schema10"
+          },
+          "buff": {
+            "$ref": "#/$defs/__schema11"
+          },
+          "登神长阶": {
+            "$ref": "#/$defs/__schema12"
+          },
+          "外貌": {
+            "default": "",
+            "type": "string"
+          },
+          "衣着": {
+            "default": "",
+            "type": "string"
+          },
+          "性格": {
+            "default": "",
+            "type": "string"
+          },
+          "行为": {
+            "default": "",
+            "type": "string"
+          },
+          "命定契约": {
+            "default": false,
+            "type": "boolean"
+          },
+          "好感": {
+            "default": 0,
+            "type": "number"
+          },
+          "背景": {
+            "default": "",
+            "type": "string"
+          }
+        },
+        "additionalProperties": {}
+      }
+    },
+    "tasks": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "任务名"
+      },
+      "additionalProperties": {
+        "default": {},
+        "type": "object",
+        "properties": {
+          "说明": {
+            "default": "",
+            "type": "string"
+          },
+          "状态": {
+            "default": "进行中",
+            "type": "string"
+          }
+        },
+        "additionalProperties": {}
+      }
+    }
+  },
+  "$defs": {
+    "__schema0": {
+      "default": "",
+      "type": "string"
+    },
+    "__schema1": {
+      "default": "",
+      "type": "string"
+    },
+    "__schema2": {
+      "default": "",
+      "type": "string"
+    },
+    "__schema3": {
+      "default": "",
+      "type": "string"
+    },
+    "__schema4": {
+      "default": 1,
+      "type": "number"
+    },
+    "__schema5": {
+      "default": 0,
+      "type": "number"
+    },
+    "__schema6": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "str": {
+          "default": 0,
+          "type": "number"
+        },
+        "dex": {
+          "default": 0,
+          "type": "number"
+        },
+        "con": {
+          "default": 0,
+          "type": "number"
+        },
+        "int": {
+          "default": 0,
+          "type": "number"
+        },
+        "wis": {
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "__schema7": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "程度": {
+          "default": "无损",
+          "type": "string",
+          "enum": [
+            "无损",
+            "轻伤",
+            "中伤",
+            "重伤",
+            "濒死",
+            "死亡"
+          ]
+        },
+        "部位": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "部位"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "description": "行动限制"
+          }
+        }
+      }
+    },
+    "__schema8": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "money": {
+          "default": 0,
+          "type": "number"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "__schema9": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "物品名"
+      },
+      "additionalProperties": {
+        "default": {},
+        "type": "object",
+        "properties": {
+          "数量": {
+            "default": 1,
+            "type": "number"
+          }
+        },
+        "additionalProperties": {}
+      }
+    },
+    "__schema10": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "技能名"
+      },
+      "additionalProperties": {
+        "default": {},
+        "type": "object",
+        "properties": {},
+        "additionalProperties": {}
+      }
+    },
+    "__schema11": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "buff名"
+      },
+      "additionalProperties": {
+        "default": {},
+        "type": "object",
+        "properties": {},
+        "additionalProperties": {}
+      }
+    },
+    "__schema12": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "_已开启": {
+          "default": false,
+          "type": "boolean"
+        },
+        "要素": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "权能": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "法则": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "神位": {
+          "default": "",
+          "type": "string"
+        },
+        "神国": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
