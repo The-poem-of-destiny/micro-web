@@ -1,7 +1,7 @@
 ```
 <body>
 <script>
-$('body').load('http://127.0.0.1:5500/dist/poem/interface/start_web/index.html')
+$('body').load('https://cdn.jsdelivr.net/gh/The-poem-of-destiny/micro-web@latest/dist/poem/interface/start_web/index.html')
 </script>
 </body>
 ```

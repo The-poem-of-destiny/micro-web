@@ -9443,12 +9443,12 @@
 
   酒馆助手:
     脚本库:
-      - 名称: 【命定之诗】ZOD
+      - 名称: 【命定之诗】Schema
         id: f8926eff-b77c-45aa-8e75-344f3b1409c9
         启用: true
         类型: 脚本
         内容: import
-          'https://testingcf.jsdelivr.net/gh/The-poem-of-destiny/FrontEnd-for-destined-journey@1.9.20/dist/data_schema/index.js'
+          'https://cdn.jsdelivr.net/gh/The-poem-of-destiny/micro-web@latest/dist/poem/scripts/zod_schema/index.js'
         导出时携带:
           数据: true
           按钮: true
@@ -9466,7 +9466,7 @@
           启用: true
           按钮列表:
             - 名称: 重新读取初始变量
-              可见: true
+              可见: false
             - 名称: 清除旧楼层变量
               可见: false
             - 名称: 重新处理变量
@@ -9481,12 +9481,22 @@
           是否显示变量更新错误: 是
           构建信息: 2025-10-03T12:37:14.652Z (55ca7bb)
 
+      - 名称: 【命定之诗】var_control
+        id: fa861702-3d99-4b0a-933c-57c8354f8b0e
+        启用: true
+        类型: 脚本
+        内容: import
+          'https://cdn.jsdelivr.net/gh/The-poem-of-destiny/micro-web@latest/dist/poem/scripts/var_control/index.js'
+        导出时携带:
+          数据: true
+          按钮: true
+
       - 名称: 【命定之诗】状态栏
         id: fa861702-3d99-4b0a-933c-57c8354f8b0e
         启用: true
         类型: 脚本
         内容: import
-          'https://testingcf.jsdelivr.net/gh/The-poem-of-destiny/Automated-script-for-destined-journey@3.4.5/dist/index.js'
+          'https://cdn.jsdelivr.net/gh/The-poem-of-destiny/micro-web@latest/dist/poem/scripts/status_web/index.js'
         导出时携带:
           数据: true
           按钮: true
