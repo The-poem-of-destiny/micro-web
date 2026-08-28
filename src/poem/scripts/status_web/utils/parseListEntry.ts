@@ -1,10 +1,11 @@
 /**
  * 通用卡列表条目解析（物品 / 技能 / buff / 资产共用）。
- * 字段按白名单路由（生成规则见 世界书/mechanism/）：
+ * 字段按白名单路由（生成规则见变量更新规则）：
  * - 品质（普通~唯一）→ 品质色徽标；buff 类型（增益/减益）→ 状态色徽标
- * - 短字段（类型/消耗/层数/剩余时间/状态）→ 头行灰徽标
- * - 效果（object）→ 正文逐条「效果名: 效果」行
- * - 长文字段（描述/空间/来源…）→ label + 截断行
+ * - 短字段（类型/消耗/层数/剩余时间）→ 头行灰徽标
+ * - 效果（record「效果名: 效果」）→ 正文逐条效果行
+ * - 空间（{分区, 空闲面积, 规模}）/ 经营（{状态, 估价, 收益, 结算日}）→ 结构化块
+ * - 长文字段（描述/来源…）→ label + 截断行
  * 数量挂名称旁 ×N（=1 省略）；未识别字段兜底路由，不丢数据。
  */
 
@@ -55,12 +56,35 @@ export interface LongLine {
   text: string;
   lines: number;
 }
+/** 空间分区（键为分区名） */
+export interface SpaceArea {
+  name: string;
+  rooms: string;
+  area: string;
+}
+/** 资产空间：分区列表 + 空闲面积 + 规模 */
+export interface SpaceInfo {
+  areas: SpaceArea[];
+  freeArea: string;
+  scale: string;
+}
+/** 资产经营：状态/估价/收益/结算日 */
+export interface ManageInfo {
+  status: string;
+  valuation: string;
+  income: string;
+  settleDay: string;
+}
 export interface ListItem {
   name: string;
   count: number;
   badges: Badge[];
   effects: EffectLine[];
   longs: LongLine[];
+  /** 资产空间块（仅资产条目） */
+  space?: SpaceInfo;
+  /** 资产经营块（仅资产条目） */
+  manage?: ManageInfo;
   /** 品质排序权重（无品质 = 0） */
   quality: number;
   /** 类型文本（技能/物品的类型、buff 的增益/减益/特殊；排序分组用） */
@@ -123,7 +147,7 @@ export function parseEntry(name: string, raw: unknown): ListItem {
     delete obj[field];
   }
 
-  // 效果：object 逐条展开为「效果名: 效果」行；string 作长文
+  // 效果：record 逐条展开为「效果名: 效果」行；string 作长文
   const eff = obj.效果;
   if (eff !== undefined && eff !== null) {
     if (typeof eff === 'object') {
@@ -135,6 +159,36 @@ export function parseEntry(name: string, raw: unknown): ListItem {
       item.longs.push({ key: '效果', text: String(eff), lines: 2 });
     }
     delete obj.效果;
+  }
+
+  // 空间：结构化渲染（分区列表 + 空闲面积 + 规模）；非对象留给兜底路由
+  const sp = obj.空间;
+  if (sp !== undefined && sp !== null && typeof sp === 'object') {
+    const s = sp as Record<string, any>;
+    const areas = Object.entries((s.分区 as Record<string, any>) ?? {}).map(([name, v]) => {
+      const a = (v && typeof v === 'object' ? v : {}) as Record<string, any>;
+      return {
+        name,
+        rooms: Array.isArray(a.房间) ? a.房间.filter((r: unknown) => typeof r === 'string' && r).join('、') : formatVal(a.房间),
+        area: typeof a.面积 === 'string' ? a.面积 : '',
+      };
+    });
+    const freeArea = typeof s.空闲面积 === 'string' && s.空闲面积 && s.空闲面积 !== '不适用' ? s.空闲面积 : '';
+    const scale = typeof s.规模 === 'string' && s.规模 && s.规模 !== '不适用' ? s.规模 : '';
+    if (areas.length || freeArea || scale) item.space = { areas, freeArea, scale };
+    delete obj.空间;
+  }
+
+  // 经营：状态徽标 + 估价/收益/结算日；非对象留给兜底路由
+  const mg = obj.经营;
+  if (mg !== undefined && mg !== null && typeof mg === 'object') {
+    const m = mg as Record<string, any>;
+    const status = typeof m.状态 === 'string' ? m.状态 : '';
+    const valuation = typeof m.估价 === 'string' && m.估价 && m.估价 !== '不适用' ? m.估价 : '';
+    const income = typeof m.收益 === 'string' ? m.收益 : '';
+    const settleDay = typeof m.结算日 === 'string' ? m.结算日 : '';
+    if (status || valuation || income || settleDay) item.manage = { status, valuation, income, settleDay };
+    delete obj.经营;
   }
 
   // 剩余未识别字段：object → 效果行；string → 长文行（不丢数据）

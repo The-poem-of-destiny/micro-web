@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import type { CSSProperties } from 'vue';
+import { computed } from 'vue';
 import type { Badge, ListItem } from '../utils/parseListEntry';
 import { compareItems, parseEntry } from '../utils/parseListEntry';
 import FaIcon from './FaIcon.vue';
@@ -9,7 +9,7 @@ import LongText from './LongText.vue';
 /**
  * 通用卡列表（物品 / 技能 / buff / 资产 共用）。
  * 条目解析见 utils/parseListEntry.ts（白名单字段路由）。
- * 叙事长文默认截断（描述 2 行/空间 3 行），点击展开全文、再点收起（评论区式）。
+ * 叙事长文默认截断（描述 2 行/规模 2 行），点击展开全文、再点收起（评论区式）。
  */
 
 const props = defineProps<{
@@ -45,7 +45,6 @@ function badgeStyle(badge: Badge): CSSProperties {
     background: `color-mix(in srgb, ${badge.color} 15%, transparent)`,
   };
 }
-
 </script>
 
 <template>
@@ -58,22 +57,46 @@ function badgeStyle(badge: Badge): CSSProperties {
     v-for="item in items"
     :key="item.name"
     class="stb-list__card"
-    :class="{ 'stb-list__card--solo': item.effects.length === 0 && item.longs.length === 0 }"
+    :class="{
+      'stb-list__card--solo': item.effects.length === 0 && item.longs.length === 0 && !item.space && !item.manage,
+    }"
   >
     <div class="stb-list__head">
       <span class="stb-list__name">{{ item.name }}</span>
       <span v-if="item.count > 1" class="stb-list__count">×{{ item.count }}</span>
-      <span
-        v-for="(badge, i) in item.badges"
-        :key="i"
-        class="stb-list__badge"
-        :style="badgeStyle(badge)"
-      >{{ badge.text }}</span>
+      <span v-for="(badge, i) in item.badges" :key="i" class="stb-list__badge" :style="badgeStyle(badge)">{{
+        badge.text
+      }}</span>
     </div>
 
     <div v-for="(eff, i) in item.effects" :key="i" class="stb-list__effect">
       <span class="stb-list__effect-key">{{ eff.key }}</span>
       <span class="stb-list__effect-val">{{ eff.val }}</span>
+    </div>
+
+    <!-- 空间块（资产）：分区列表 + 空闲面积 + 规模 -->
+    <div v-if="item.space" class="stb-list__space">
+      <div v-for="(a, i) in item.space.areas" :key="i" class="stb-list__space-row">
+        <span class="stb-list__space-name">{{ a.name }}</span>
+        <span v-if="a.rooms" class="stb-list__space-rooms">{{ a.rooms }}</span>
+        <span v-if="a.area" class="stb-list__space-area">{{ a.area }}m²</span>
+      </div>
+      <div v-if="item.space.freeArea" class="stb-list__space-row">
+        <span class="stb-list__space-name">空闲面积</span>
+        <span class="stb-list__space-area">{{ item.space.freeArea }}m²</span>
+      </div>
+      <div v-if="item.space.scale" class="stb-list__long-wrap">
+        <span class="stb-list__long-key">规模</span>
+        <LongText class="stb-list__long-text" :text="item.space.scale" :lines="2" />
+      </div>
+    </div>
+
+    <!-- 经营块（资产）：状态徽标 + 估价/收益/结算日 -->
+    <div v-if="item.manage" class="stb-list__manage">
+      <span v-if="item.manage.status" class="stb-list__badge">{{ item.manage.status }}</span>
+      <span v-if="item.manage.valuation" class="stb-list__manage-item">估价 {{ item.manage.valuation }}G</span>
+      <span v-if="item.manage.income" class="stb-list__manage-item">{{ item.manage.income }}</span>
+      <span v-if="item.manage.settleDay" class="stb-list__manage-item">结算日 {{ item.manage.settleDay }}</span>
     </div>
 
     <div v-for="(long, i) in item.longs" :key="i" class="stb-list__long-wrap">
@@ -204,6 +227,48 @@ function badgeStyle(badge: Badge): CSSProperties {
   font-size: var(--stb-font-size-xs);
   color: var(--stb-color-text-dim);
   line-height: 1.5;
+}
+
+// ---------- 空间块（资产）：分区列表 + 空闲面积 + 规模 ----------
+.stb-list__space {
+  margin-top: var(--stb-space-1);
+  padding: var(--stb-space-1) var(--stb-space-2);
+  border-left: 1px solid var(--stb-color-border-soft);
+}
+
+.stb-list__space-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--stb-space-2);
+  font-size: var(--stb-font-size-xs);
+  line-height: 1.5;
+}
+
+.stb-list__space-name {
+  flex-shrink: 0;
+  color: var(--stb-color-accent-soft);
+}
+
+.stb-list__space-rooms {
+  flex: 1;
+  min-width: 0;
+  color: var(--stb-color-text-dim);
+}
+
+.stb-list__space-area {
+  flex-shrink: 0;
+  color: var(--stb-color-text-dim);
+}
+
+// ---------- 经营块（资产）：状态徽标 + 估价/收益/结算日 ----------
+.stb-list__manage {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--stb-space-1) var(--stb-space-2);
+  margin-top: var(--stb-space-1);
+  font-size: var(--stb-font-size-xs);
+  color: var(--stb-color-text-dim);
 }
 
 .stb-list__empty {

@@ -51,21 +51,97 @@ const characterBase = {
     .prefault({}),
 
   资产: z
-    .looseObject({
+    .object({
       money: z.coerce
         .number()
         .transform(v => Math.max(v, 0))
-        .prefault(0), // 钱包/金钱固定数值；其他资产自由（string 或 object）
+        .prefault(0), // 钱包/金钱固定数值
     })
+    // 资产条目：键为资产名，值对象字段约束
+    .catchall(
+      z
+        .looseObject({
+          品质: z.string().prefault(''),
+          类型: z.string().prefault(''),
+          效果: z.record(z.string(), z.string()).prefault({}),
+          描述: z.string().prefault(''),
+          空间: z
+            .looseObject({
+              分区: z
+                .record(
+                  z.string().describe('分区名'),
+                  z
+                    .looseObject({
+                      房间: z.array(z.string()).prefault([]),
+                      面积: z.string().prefault(''),
+                    })
+                    .prefault({}),
+                )
+                .prefault({}),
+              空闲面积: z.string().prefault(''),
+              规模: z.string().prefault(''),
+            })
+            .prefault({}),
+          经营: z
+            .looseObject({
+              状态: z.string().prefault(''),
+              估价: z.string().prefault(''),
+              收益: z.string().prefault(''),
+              结算日: z.string().prefault(''),
+            })
+            .prefault({}),
+        })
+        .prefault({}),
+    )
     .prefault({}),
 
   物品: z
-    .record(z.string().describe('物品名'), z.looseObject({ 数量: z.coerce.number().prefault(1) }).prefault({}))
+    .record(
+      z.string().describe('物品名'),
+      z
+        .looseObject({
+          数量: z.coerce.number().prefault(1),
+          品质: z.string().prefault(''),
+          类型: z.string().prefault(''),
+          效果: z.record(z.string(), z.string()).prefault({}),
+          描述: z.string().prefault(''),
+        })
+        .prefault({}),
+    )
     .prefault({}),
 
-  技能: z.record(z.string().describe('技能名'), z.looseObject({}).prefault({})).prefault({}),
+  技能: z
+    .record(
+      z.string().describe('技能名'),
+      z
+        .looseObject({
+          品质: z.string().prefault(''),
+          类型: z.string().prefault(''),
+          消耗: z.string().prefault(''),
+          效果: z.record(z.string(), z.string()).prefault({}),
+          描述: z.string().prefault(''),
+        })
+        .prefault({}),
+    )
+    .prefault({}),
 
-  buff: z.record(z.string().describe('buff名'), z.looseObject({}).prefault({})).prefault({}),
+  buff: z
+    .record(
+      z.string().describe('buff名'),
+      z
+        .looseObject({
+          类型: z.string().prefault(''),
+          层数: z.coerce
+            .number()
+            .transform(v => Math.max(v, 1))
+            .prefault(1),
+          剩余时间: z.string().prefault(''),
+          来源: z.string().prefault(''),
+          效果: z.string().prefault(''),
+        })
+        .prefault({}),
+    )
+    .prefault({}),
 
   登神长阶: z
     .object({
@@ -165,7 +241,11 @@ export const Schema = z.object({
       z
         .looseObject({
           说明: z.string().prefault(''),
-          状态: z.string().prefault('进行中'),
+          状态: z.string().prefault(''),
+          委托: z.string().prefault(''),
+          等级: z.string().prefault(''),
+          目标: z.string().prefault(''),
+          奖励: z.string().prefault(''),
         })
         .prefault({}),
     )

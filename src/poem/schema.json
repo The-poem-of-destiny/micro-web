@@ -209,7 +209,23 @@
             "type": "string"
           },
           "状态": {
-            "default": "进行中",
+            "default": "",
+            "type": "string"
+          },
+          "委托": {
+            "default": "",
+            "type": "string"
+          },
+          "等级": {
+            "default": "",
+            "type": "string"
+          },
+          "目标": {
+            "default": "",
+            "type": "string"
+          },
+          "奖励": {
+            "default": "",
             "type": "string"
           }
         },
@@ -307,7 +323,99 @@
           "type": "number"
         }
       },
-      "additionalProperties": {}
+      "additionalProperties": {
+        "default": {},
+        "type": "object",
+        "properties": {
+          "品质": {
+            "default": "",
+            "type": "string"
+          },
+          "类型": {
+            "default": "",
+            "type": "string"
+          },
+          "效果": {
+            "default": {},
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "描述": {
+            "default": "",
+            "type": "string"
+          },
+          "空间": {
+            "default": {},
+            "type": "object",
+            "properties": {
+              "分区": {
+                "default": {},
+                "type": "object",
+                "propertyNames": {
+                  "type": "string",
+                  "description": "分区名"
+                },
+                "additionalProperties": {
+                  "default": {},
+                  "type": "object",
+                  "properties": {
+                    "房间": {
+                      "default": [],
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "面积": {
+                      "default": "",
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": {}
+                }
+              },
+              "空闲面积": {
+                "default": "",
+                "type": "string"
+              },
+              "规模": {
+                "default": "",
+                "type": "string"
+              }
+            },
+            "additionalProperties": {}
+          },
+          "经营": {
+            "default": {},
+            "type": "object",
+            "properties": {
+              "状态": {
+                "default": "",
+                "type": "string"
+              },
+              "估价": {
+                "default": "",
+                "type": "string"
+              },
+              "收益": {
+                "default": "",
+                "type": "string"
+              },
+              "结算日": {
+                "default": "",
+                "type": "string"
+              }
+            },
+            "additionalProperties": {}
+          }
+        },
+        "additionalProperties": {}
+      }
     },
     "__schema9": {
       "default": {},
@@ -323,6 +431,28 @@
           "数量": {
             "default": 1,
             "type": "number"
+          },
+          "品质": {
+            "default": "",
+            "type": "string"
+          },
+          "类型": {
+            "default": "",
+            "type": "string"
+          },
+          "效果": {
+            "default": {},
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "描述": {
+            "default": "",
+            "type": "string"
           }
         },
         "additionalProperties": {}
@@ -338,7 +468,34 @@
       "additionalProperties": {
         "default": {},
         "type": "object",
-        "properties": {},
+        "properties": {
+          "品质": {
+            "default": "",
+            "type": "string"
+          },
+          "类型": {
+            "default": "",
+            "type": "string"
+          },
+          "消耗": {
+            "default": "",
+            "type": "string"
+          },
+          "效果": {
+            "default": {},
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "描述": {
+            "default": "",
+            "type": "string"
+          }
+        },
         "additionalProperties": {}
       }
     },
@@ -352,7 +509,28 @@
       "additionalProperties": {
         "default": {},
         "type": "object",
-        "properties": {},
+        "properties": {
+          "类型": {
+            "default": "",
+            "type": "string"
+          },
+          "层数": {
+            "default": 1,
+            "type": "number"
+          },
+          "剩余时间": {
+            "default": "",
+            "type": "string"
+          },
+          "来源": {
+            "default": "",
+            "type": "string"
+          },
+          "效果": {
+            "default": "",
+            "type": "string"
+          }
+        },
         "additionalProperties": {}
       }
     },
