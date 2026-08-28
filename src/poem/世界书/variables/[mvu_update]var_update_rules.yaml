@@ -91,7 +91,7 @@
           [buff名: string]: {} // 如 类型/层数/剩余时间/来源，可自由扩展
         }
       check:
-        - 按<buff_rules>格式生成，生效时 insert、失效时 remove
+        - 按<buff_rule>格式生成，生效时 insert、失效时 remove
         - 剩余时间必须按照'time'的流逝而减少
         - 层数变化需有明确原因
     登神长阶:
