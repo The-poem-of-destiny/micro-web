@@ -29,10 +29,14 @@ export const useStatusStore = defineStore('status_web', () => {
   /** 任务列表（全局作用域，含脚本注入的登神阶段任务） */
   const tasks = computed(() => (stat.value.tasks ?? {}) as Record<string, any>);
 
-  /** 刷新展示数据（挂载时与每次变量更新结束时调用） */
-  function refresh(): void {
-    const variables = getVariables({ type: 'message', message_id: 'latest' });
-    const raw = (_.get(variables, 'stat_data') ?? {}) as Record<string, any>;
+  /**
+   * 刷新展示数据（挂载时与每次变量更新时调用，须在 MVU 初始化完成后）
+   *
+   * 变量更新事件传入的变量表在写回楼层前触发，此时重新读取只能得到旧数据，
+   * 因此优先使用事件传入的 `variables`；仅在挂载初次拉取时读取最新楼层变量。
+   */
+  function refresh(variables?: Mvu.MvuData): void {
+    const raw = (_.get(variables ?? Mvu.getMvuData({ type: 'message', message_id: 'latest' }), 'stat_data') ?? {}) as Record<string, any>;
     const parsed = Schema.safeParse(raw);
     if (parsed.success) {
       stat.value = parsed.data as Record<string, any>;

@@ -17,12 +17,19 @@ $(() => {
 
   console.info('[status_web] 挂载式状态栏已加载');
 
-  // 初次拉取展示数据
-  useStatusStore(pinia).refresh();
-
-  // 变量更新结束 → 刷新展示（等待 MVU 就绪）
+  // 等 MVU 就绪后统一走 Mvu 接口：初次拉取 + 变量更新监听
   waitGlobalInitialized('Mvu').then(() => {
-    eventOn(Mvu.events.VARIABLE_UPDATE_ENDED, () => useStatusStore(pinia).refresh());
+    // 初次拉取展示数据（此刻最新楼层的变量早已写回，可直接读取）
+    useStatusStore(pinia).refresh();
+
+    // 变量更新 → 刷新展示
+    // 监听 BEFORE_MESSAGE_UPDATE 而非 VARIABLE_UPDATE_ENDED：
+    // 两者触发时变量均未写回楼层，回调内重新读取只能得到旧数据；
+    // 而 BEFORE_MESSAGE_UPDATE 携带最终 variables 引用，且在其他脚本的结算监听器（如 var_control 等级结算）之后触发
+    eventOn(
+      Mvu.events.BEFORE_MESSAGE_UPDATE,
+      errorCatched(({ variables }) => useStatusStore(pinia).refresh(variables)),
+    );
   });
 
   // 聊天切换 → 重载（消息变量随聊天变化）
